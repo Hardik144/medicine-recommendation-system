@@ -2,20 +2,37 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-# Dummy prediction function
-def get_medicine_recommendation(symptoms):
-    if not symptoms:
-        return None, None
-    return "DummyDisease", ["DummyMedicine 1", "DummyMedicine 2"]
+# Simple symptom-to-medicine mapping for demo
+symptom_medicine_map = {
+    "fever": "Paracetamol",
+    "cough": "Benadryl",
+    "headache": "Aspirin",
+    "cold": "Cetirizine",
+    "sore throat": "Strepsils",
+    "body pain": "Ibuprofen",
+    "vomiting": "Ondansetron",
+    "diarrhea": "Loperamide"
+}
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    prediction = None
-    medicines = None
-    if request.method == 'POST':
-        symptoms = request.form.get('symptoms')
-        prediction, medicines = get_medicine_recommendation(symptoms)
-    return render_template("index.html", prediction=prediction, medicines=medicines)
+@app.route("/")
+def home():
+    return render_template("index.html")
 
-if __name__ == '__main__':
+@app.route("/predict", methods=["POST"])
+def predict():
+    symptoms = request.form.get("symptoms", "").lower()
+    matched_medicines = []
+
+    for symptom, medicine in symptom_medicine_map.items():
+        if symptom in symptoms:
+            matched_medicines.append(medicine)
+
+    if matched_medicines:
+        result = ", ".join(set(matched_medicines))
+    else:
+        result = "No matching medicine found. Please try again."
+
+    return render_template("index.html", result=result, entered_symptoms=symptoms)
+
+if __name__ == "__main__":
     app.run(debug=True)

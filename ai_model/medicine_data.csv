@@ -1,0 +1,6 @@
+Symptom,Medicine
+fever,Paracetamol
+headache,Aspirin
+cold,Cetirizine
+fever;headache,Paracetamol;Aspirin
+cold;cough,Cetirizine;Cough Syrup

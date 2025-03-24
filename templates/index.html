@@ -1,32 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Medicine Recommendation System</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-
   <div class="container">
-    <h1>Medicine Recommendation System 💊</h1>
-    
-    <form method="POST">
-      <label for="symptoms">Enter your symptoms:</label>
-      <input type="text" id="symptoms" name="symptoms" placeholder="e.g., fever, cough" required>
+    <h1>Medicine Recommendation System</h1>
+    <form method="POST" action="/predict">
+      <label for="symptoms">Enter your symptoms (comma-separated):</label><br>
+      <input type="text" id="symptoms" name="symptoms" placeholder="Enter your symptoms here" required value="{{ entered_symptoms if entered_symptoms else '' }}">
       <button type="submit">Get Recommendation</button>
     </form>
 
-    {% if prediction %}
-      <div class="result-card">
-        <h2>Predicted Disease: {{ prediction }}</h2>
-        <p><strong>Recommended Medicines:</strong> {{ medicines | join(', ') }}</p>
-      </div>
-    {% elif prediction is not none %}
-      <div class="result-card">
-        <p>Sorry, no recommendation found for the given symptoms.</p>
+    {% if result %}
+      <div class="result">
+        <h2>Recommended Medicine:</h2>
+        <p>{{ result }}</p>
       </div>
     {% endif %}
   </div>
-
 </body>
 </html>
