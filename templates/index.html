@@ -6,26 +6,35 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="container">
-    <h1>🩺 Medicine Recommendation System</h1>
-    <p>Enter your symptoms below (comma-separated):</p>
-
-    <form action="/recommend" method="POST">
-      <input type="text" name="symptoms" placeholder="e.g. fever, cough, headache" required>
-      <button type="submit">Get Recommendation</button>
-    </form>
-
-    {% if disease and medicines %}
-      <div class="result">
-        <h2>Prediction Result</h2>
-        <p><strong>Disease:</strong> {{ disease }}</p>
-        <p><strong>Recommended Medicines:</strong> {{ medicines }}</p>
-      </div>
-    {% elif message %}
-      <div class="result warning">
-        <p>{{ message }}</p>
-      </div>
-    {% endif %}
-  </div>
-</body>
+    <div class="container">
+      <h1>Medicine Recommendation System 💊</h1>
+      <form action="/recommend" method="POST">
+        <label for="symptoms">Select your symptoms:</label>
+        <select id="symptoms" name="symptoms" multiple required>
+          <option value="fever">Fever</option>
+          <option value="cough">Cough</option>
+          <option value="headache">Headache</option>
+          <option value="fatigue">Fatigue</option>
+          <option value="nausea">Nausea</option>
+          <option value="sore throat">Sore Throat</option>
+          <option value="runny nose">Runny Nose</option>
+          <option value="body pain">Body Pain</option>
+          <option value="chills">Chills</option>
+          <option value="vomiting">Vomiting</option>
+        </select>
+        <p style="font-size: 0.9em; color: #666;">(Hold Ctrl or Cmd to select multiple)</p>
+        <button type="submit">Get Recommendation</button>
+      </form>
+      
+  
+      {% if disease and medicines %}
+        <div class="result-card">
+          <h2>Predicted Disease: {{ disease }}</h2>
+          <p><strong>Recommended Medicines:</strong> {{ medicines }}</p>
+        </div>
+      {% elif message %}
+        <p class="message">{{ message }}</p>
+      {% endif %}
+    </div>
+  </body>  
 </html>

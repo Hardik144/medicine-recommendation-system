@@ -8,21 +8,20 @@ def home():
 
 @app.route('/recommend', methods=['POST'])
 def recommend():
-    symptoms = request.form['symptoms']
+    symptoms = request.form.getlist('symptoms')
 
-    # Dummy logic for now (we'll replace this later with real AI logic)
-    if "fever" in symptoms.lower():
-        disease = "Common Cold"
-        medicines = "Paracetamol, Cetirizine"
-    else:
-        disease = None
-        medicines = None
+    if not symptoms:
+        return render_template('index.html', message="Please select at least one symptom.")
 
-    message = None
-    if not disease:
-        message = "Sorry, no recommendation found for the given symptoms."
+    # Join symptoms into a string for processing
+    symptoms_str = ", ".join(symptoms)
 
-    return render_template("index.html", disease=disease, medicines=medicines, message=message)
+    # Placeholder logic
+    disease = "DummyDisease"
+    medicines = "DummyMedicine 1, DummyMedicine 2"
+
+    return render_template('index.html', disease=disease, medicines=medicines)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
