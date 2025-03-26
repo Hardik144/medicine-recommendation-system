@@ -1,18 +1,20 @@
+import pickle
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-# Simple symptom-to-medicine mapping for demo
-symptom_medicine_map = {
-    "fever": "Paracetamol",
-    "cough": "Benadryl",
-    "headache": "Aspirin",
-    "cold": "Cetirizine",
-    "sore throat": "Strepsils",
-    "body pain": "Ibuprofen",
-    "vomiting": "Ondansetron",
-    "diarrhea": "Loperamide"
-}
+# Load symptom-medicine mapping from Pickle
+def load_symptom_medicine_mapping():
+    try:
+        with open("medicine.pkl", "rb") as file:
+            return pickle.load(file)
+    except Exception as e:
+        print(f"Error loading Pickle: {e}")
+        return {}  # Return an empty dictionary if file loading fails
+
+# Assign the loaded data to a global variable
+symptom_medicine_map = load_symptom_medicine_mapping()
+print("Loaded Symptom-Medicine Map:", symptom_medicine_map)  # Debugging
 
 @app.route("/")
 def home():
@@ -27,10 +29,7 @@ def predict():
         if symptom in symptoms:
             matched_medicines.append(medicine)
 
-    if matched_medicines:
-        result = ", ".join(set(matched_medicines))
-    else:
-        result = "No matching medicine found. Please try again."
+    result = ", ".join(set(matched_medicines)) if matched_medicines else "No matching medicine found. Please try again."
 
     return render_template("index.html", result=result, entered_symptoms=symptoms)
 
